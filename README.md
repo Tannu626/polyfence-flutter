@@ -263,9 +263,9 @@ By default, Polyfence shows built-in "Entered Zone" / "Exited Zone" notification
 
 ```dart
 await Polyfence.instance.initialize(
-  config: {
-    'disableAlertNotifications': true,  // Suppress built-in zone alerts
-  },
+  config: PolyfenceConfiguration(
+    disableAlertNotifications: true,  // Suppress built-in zone alerts
+  ),
 );
 ```
 

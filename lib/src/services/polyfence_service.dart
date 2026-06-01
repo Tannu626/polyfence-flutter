@@ -161,9 +161,9 @@ class PolyfenceService {
   ///
   /// // With custom notification behavior:
   /// await Polyfence.instance.initialize(
-  ///   config: {
-  ///     'disableAlertNotifications': true, // Suppress built-in zone alerts
-  ///   },
+  ///   config: PolyfenceConfiguration(
+  ///     disableAlertNotifications: true, // Suppress built-in zone alerts
+  ///   ),
   /// );
   ///
   /// // Opt out of telemetry:
