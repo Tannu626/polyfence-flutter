@@ -1,4 +1,4 @@
-# <img src="logo-icon-512.png" alt="PolyFence Logo" width="48" style="vertical-align: middle; margin-right: 10px;"> <span style="vertical-align: middle">Polyfence</span>
+# Polyfence Flutter
 
 Polyfence is the geofence layer — same zones run on your mobile app, your IoT device, and your server. This package is the Flutter SDK; see [polyfence-core](https://github.com/polyfence/polyfence-core) (native engines) and [polyfence-embedded](https://github.com/polyfence/polyfence-embedded) (C library for IoT) for the other surfaces.
 
@@ -9,6 +9,13 @@ Polyfence is the geofence layer — same zones run on your mobile app, your IoT 
 [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 ![Platform: Android & iOS](https://img.shields.io/badge/platform-Android%20%7C%20iOS-blue)
 [![pub points](https://img.shields.io/pub/points/polyfence)](https://pub.dev/packages/polyfence/score)
+
+<p>
+  <img alt="Map view" src="assets/screenshots/map-view.jpg" width="280" />
+  <img alt="Zones with live state" src="assets/screenshots/zones.jpg" width="280" />
+</p>
+
+The screenshots above are from the [example app](example/) in this repo — a working Flutter app that loads zones from the Polyfence SaaS (or local demo zones), tracks location, and renders enter / exit / dwell events. Sign up at [polyfence.io](https://polyfence.io) for a free API key, then follow [`example/README.md`](example/README.md) to run it locally.
 
 ## Why Polyfence?
 
@@ -219,6 +226,10 @@ Polyfence.instance.onGeofenceEvent.listen((event) {
 });
 ```
 
+<p align="center">
+  <img alt="ENTER, EXIT and DWELL events as your device moves" src="assets/screenshots/events.png" width="280" />
+</p>
+
 ### Step 5: Start Tracking
 
 ```dart
@@ -284,6 +295,10 @@ await Polyfence.instance.setAccuracyProfile(PolyfenceAccuracyProfile.adaptive);
 | **Adaptive** | Dynamic | Dynamic (Android) | Variable | Apps with varying accuracy needs |
 
 > **Platform Note:** Both platforms respect accuracy profiles. Android uses explicit update intervals; iOS uses `desiredAccuracy` and `distanceFilter` settings which CoreLocation optimizes automatically.
+
+<p align="center">
+  <img alt="GPS profile selector — Max, Balanced, Battery, Smart" src="assets/screenshots/dashboard.png" width="280" />
+</p>
 
 ### Advanced Configuration
 
@@ -491,6 +506,13 @@ await Polyfence.instance.updateConfiguration(
 
 Polyfence includes battery optimizations that reduce drain by an estimated 40-50%. The default profile is BALANCED.
 
+Events fire whether the app is foregrounded, backgrounded, or the screen is locked. Here's what users see on each platform when zones fire in the background:
+
+<p align="center">
+  <img alt="Background events on iOS lock screen" src="assets/screenshots/notifications-ios.jpg" width="280" />
+  <img alt="Background events on Android notification shade" src="assets/screenshots/notifications-android.jpg" width="280" />
+</p>
+
 | Feature | Description | Platforms |
 |---------|-------------|-----------|
 | **Deferred GPS Start** | GPS doesn't start until zones are registered | Android & iOS |
@@ -670,11 +692,6 @@ The app starts with 3 hardcoded zones. This is a valid production pattern — ma
 4. Restart the app
 
 **What the example demonstrates:** standalone zone management, API integration patterns, delta-based sync, zone entry/exit event handling, background tracking across app states, GPS profile switching, permission request flow, and error stream handling.
-
-<p>
-  <img alt="Dashboard" src="assets/screenshot-dashboard.png" width="280" />
-  <img alt="Zone Map" src="assets/screenshot-map.png" width="280" />
-</p>
 
 ---
 

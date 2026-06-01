@@ -13,6 +13,18 @@ topics:
   - background
   - privacy
 
+screenshots:
+  - description: 'Visual geofence overlay on a real map'
+    path: assets/screenshots/map-view.jpg
+  - description: 'Zone list with live Inside and Near indicators'
+    path: assets/screenshots/zones.jpg
+  - description: 'ENTER, EXIT and DWELL events as your device moves'
+    path: assets/screenshots/events.png
+  - description: 'GPS power profile selector — Max, Balanced, Battery, Smart'
+    path: assets/screenshots/dashboard.png
+  - description: 'Events fire in the background and surface as system notifications'
+    path: assets/screenshots/notifications-ios.jpg
+
 environment:
   sdk: '>=3.0.0 <4.0.0'
   flutter: ">=3.10.0"
