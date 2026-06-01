@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-06-01
+
+### Changed
+- Refreshed README screenshots — hero pair plus inline shots for Events, Dashboard, and background Notifications (iOS + Android). `pubspec.yaml` `screenshots:` block added for the pub.dev gallery (Map view becomes the package card thumbnail).
+- README header set to `# Polyfence Flutter`.
+- Consistency-check documentation moved to `.github/CONSISTENCY_CHECKS.md`.
+
+### Fixed
+- README "Alert Notifications" example and the matching dartdoc on `PolyfenceService.initialize()` now pass a typed `PolyfenceConfiguration` to `initialize(config:)`, matching the method signature.
+
 ## [1.0.0] - 2026-05-31
 
 ### Changed
