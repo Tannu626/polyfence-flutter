@@ -62,15 +62,26 @@ public class PolyfencePlugin: NSObject, FlutterPlugin {
 
     private func emitStatus(trackingEnabled: Bool?) {
         let zonesCount = (try? zonePersistence?.getZoneCount()) ?? 0
-        let payload: [String: Any?] = [
+        // Callers pass nil on addZone / removeZone / clearAllZones —
+        // the status event isn't caused by a start/stop, so fall back
+        // to querying the real state instead of reporting false.
+        // Matches RN parity (polyfence-react-native/ios/PolyfenceModule.swift).
+        let tracking = trackingEnabled ?? (locationTracker?.isTracking() ?? false)
+        // BUG-013a: populate profile + lastAccuracy from polyfence-core
+        // instead of nil stubs. Pre-fix the two fields were always
+        // null — dead values that suggested data was available when
+        // it wasn't.
+        let profile: Any = locationTracker?.getCurrentSmartConfiguration().accuracyProfile.rawValue ?? NSNull()
+        let lastAccuracy: Any = locationTracker?.getLastKnownAccuracy() ?? NSNull()
+        let payload: [String: Any] = [
             "type": "status",
-            "trackingEnabled": trackingEnabled ?? false,
+            "trackingEnabled": tracking,
             "zonesCount": zonesCount,
-            "profile": nil,
-            "lastAccuracy": nil,
+            "profile": profile,
+            "lastAccuracy": lastAccuracy,
             "timestamp": Int64(Date().timeIntervalSince1970 * 1000)
         ]
-        PolyfencePlugin.sendPerformanceEvent(event: payload as [String : Any])
+        PolyfencePlugin.sendPerformanceEvent(event: payload)
     }
     
     // MARK: - Method Channel Handler
