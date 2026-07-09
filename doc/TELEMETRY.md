@@ -1,7 +1,6 @@
 # Polyfence Telemetry Reference
 
 **Last updated:** 2026-07-04
-**Plugin version:** 1.0.2
 
 This is the field-by-field technical reference for Polyfence's anonymous telemetry. For the privacy policy (opt-out instructions, legal basis, data retention, your rights), see [PRIVACY.md](../PRIVACY.md).
 
@@ -15,7 +14,7 @@ Here's exactly what gets sent to our analytics endpoint when a session ends:
 {
   "app_identifier": "com.example.logistics",
   "platform": "android",
-  "plugin_version": "1.0.2",
+  "plugin_version": "2.0.0",
   "core_version": "1.0.10",
 
   "industry_category": null,
@@ -82,7 +81,7 @@ Here's exactly what gets sent to our analytics endpoint when a session ends:
 |-------|------|---------|-------------|
 | `app_identifier` | string | `"com.example.logistics"` | App package name (not a user identifier) |
 | `platform` | string | `"android"` | Operating system |
-| `plugin_version` | string | `"1.0.2"` | Plugin version |
+| `plugin_version` | string | `"2.0.0"` | Plugin version |
 | `bridge_platform` | string | `"flutter"` | Bridge layer (e.g. `flutter`, `react-native`). Set automatically. |
 | `core_version` | string | `"1.0.10"` | Native engine version from polyfence-core. Stamped automatically by TelemetryAggregator. |
 
