@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:polyfence/polyfence.dart' as polyfence hide GeofenceEvent;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:flutter_lucide/flutter_lucide.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io' show Platform;
@@ -874,7 +874,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Expanded(
                 child: _NavBarItem(
-                  icon: LucideIcons.layoutDashboard,
+                  icon: LucideIcons.layout_dashboard,
                   label: 'Dashboard',
                   isActive: _currentTab == 0,
                   onTap: () => setState(() => _currentTab = 0),

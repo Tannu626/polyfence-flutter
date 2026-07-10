@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:flutter_lucide/flutter_lucide.dart';
 import '../models/app_models.dart';
 import '../theme/app_theme.dart';
 import 'common/compact_icon_button.dart';
@@ -138,7 +138,7 @@ class _ErrorCard extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.only(top: 2),
             child: Icon(
-              LucideIcons.alertTriangle,
+              LucideIcons.triangle_alert,
               size: 16,
               color: AppTheme.destructiveForeground,
             ),

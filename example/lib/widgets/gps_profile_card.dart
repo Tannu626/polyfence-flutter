@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:flutter_lucide/flutter_lucide.dart';
 import '../models/app_models.dart';
 import '../theme/app_theme.dart';
 import 'common/poly_card.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:flutter_lucide/flutter_lucide.dart';
 import '../models/app_models.dart';
 import '../theme/app_theme.dart';
 import 'common/count_badge.dart';
@@ -74,7 +74,7 @@ class _ZonesCardState extends State<ZonesCard>
               child: Row(
                 children: [
                   const Icon(
-                    LucideIcons.mapPin,
+                    LucideIcons.map_pin,
                     size: 20,
                     color: AppTheme.mutedForeground,
                   ),
@@ -94,7 +94,7 @@ class _ZonesCardState extends State<ZonesCard>
                   IconButton(
                     icon: RotationTransition(
                       turns: _rotationController,
-                      child: const Icon(LucideIcons.refreshCcw, size: 16),
+                      child: const Icon(LucideIcons.refresh_ccw, size: 16),
                     ),
                     onPressed: widget.onRefresh,
                     padding: EdgeInsets.zero,
@@ -107,8 +107,8 @@ class _ZonesCardState extends State<ZonesCard>
                   const SizedBox(width: AppTheme.spacingSm),
                   Icon(
                     _isExpanded
-                        ? LucideIcons.chevronUp
-                        : LucideIcons.chevronDown,
+                        ? LucideIcons.chevron_up
+                        : LucideIcons.chevron_down,
                     size: 20,
                     color: AppTheme.mutedForeground,
                   ),

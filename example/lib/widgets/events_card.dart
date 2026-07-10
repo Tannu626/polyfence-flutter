@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:flutter_lucide/flutter_lucide.dart';
 import '../models/app_models.dart';
 import '../theme/app_theme.dart';
 import 'common/compact_icon_button.dart';
@@ -132,7 +132,7 @@ class _EventsCardState extends State<EventsCard>
                   const Spacer(),
                   if (widget.events.isNotEmpty) ...[
                     CompactIconButton(
-                      icon: LucideIcons.trash2,
+                      icon: LucideIcons.trash_2,
                       iconSize: 16,
                       onPressed: widget.onClear,
                       tooltip: 'Clear all events',
@@ -141,8 +141,8 @@ class _EventsCardState extends State<EventsCard>
                   ],
                   Icon(
                     _isExpanded
-                        ? LucideIcons.chevronUp
-                        : LucideIcons.chevronDown,
+                        ? LucideIcons.chevron_up
+                        : LucideIcons.chevron_down,
                     size: 20,
                     color: AppTheme.mutedForeground,
                   ),
@@ -211,7 +211,7 @@ class _EventsCardState extends State<EventsCard>
     switch (type) {
       case EventType.enter:
         return (
-          icon: LucideIcons.arrowDown,
+          icon: LucideIcons.arrow_down,
           iconColor: Colors.white,
           bgColor: AppTheme.success,
           borderColor: null,
@@ -227,7 +227,7 @@ class _EventsCardState extends State<EventsCard>
         );
       case EventType.exit:
         return (
-          icon: LucideIcons.arrowUp,
+          icon: LucideIcons.arrow_up,
           iconColor: AppTheme.error,
           bgColor: Colors.transparent,
           borderColor: AppTheme.error,
@@ -235,7 +235,7 @@ class _EventsCardState extends State<EventsCard>
         );
       case EventType.error:
         return (
-          icon: LucideIcons.alertCircle,
+          icon: LucideIcons.circle_alert,
           iconColor: Colors.white,
           bgColor: AppTheme.error,
           borderColor: null,
