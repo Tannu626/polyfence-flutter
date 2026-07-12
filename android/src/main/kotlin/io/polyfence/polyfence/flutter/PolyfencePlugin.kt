@@ -193,6 +193,17 @@ class PolyfencePlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
                 val disableAlerts = configDict?.get("disableAlertNotifications") as? Boolean ?: false
                 LocationTracker.setAlertNotificationsEnabled(!disableAlerts)
 
+                // Apply all remaining tracking config fields (accuracyProfile,
+                // updateStrategy, gpsAccuracyThreshold, nested settings, etc.).
+                // Strip plugin-only keys that have dedicated handlers above so
+                // they are not double-processed by updateConfiguration.
+                if (configDict != null) {
+                    val gpsConfig = configDict - setOf("pluginVersion", "disableAlertNotifications")
+                    if (gpsConfig.isNotEmpty()) {
+                        updateConfiguration(gpsConfig)
+                    }
+                }
+
                 // Tag telemetry with bridge platform
                 LocationTracker.setBridgePlatform("flutter")
 
