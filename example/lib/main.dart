@@ -138,9 +138,61 @@ class _HomeScreenState extends State<HomeScreen> {
   ///   3. If a key is present, fetch zones.
   Future<void> _bootstrap() async {
     _loadApiKey();
+    await _runRegressionTests(); // Must run before _initializePolyfence() (1.2 owns first init)
     await _initializePolyfence();
     if (_apiKey != null && _apiKey!.isNotEmpty) {
       await _loadZonesFromAPI();
+    }
+  }
+
+  Future<void> _runRegressionTests() async {
+    await _test12();
+  }
+
+
+  Future<void> _test12() async {
+    final sent = polyfence.PolyfenceConfiguration(
+      accuracyProfile: polyfence.PolyfenceAccuracyProfile.maxAccuracy,
+      updateStrategy: polyfence.PolyfenceUpdateStrategy.movementBased,
+      gpsAccuracyThreshold: 50.0,
+      disableAlertNotifications: true,
+      enableDebugLogging: true,
+    );
+
+    try {
+      await polyfence.Polyfence.instance.initialize(config: sent);
+      final got = await polyfence.Polyfence.instance.getConfiguration();
+
+      final results = {
+        'accuracyProfile':
+            '${sent.accuracyProfile.name} → ${got.accuracyProfile.name} '
+            '${got.accuracyProfile == sent.accuracyProfile ? "PASS" : "FAIL"}',
+        'updateStrategy':
+            '${sent.updateStrategy.name} → ${got.updateStrategy.name} '
+            '${got.updateStrategy == sent.updateStrategy ? "PASS" : "FAIL"}',
+        'gpsAccuracyThreshold':
+            '${sent.gpsAccuracyThreshold} → ${got.gpsAccuracyThreshold} '
+            '${got.gpsAccuracyThreshold == sent.gpsAccuracyThreshold ? "PASS" : "FAIL"}',
+        'disableAlertNotifications':
+            '${sent.disableAlertNotifications} → ${got.disableAlertNotifications} '
+            '${got.disableAlertNotifications == sent.disableAlertNotifications ? "PASS" : "FAIL"}',
+        'enableDebugLogging':
+            '${sent.enableDebugLogging} → ${got.enableDebugLogging} '
+            '${got.enableDebugLogging == sent.enableDebugLogging ? "PASS" : "FAIL"}',
+      };
+
+      final failed = results.entries.where((e) => e.value.contains('FAIL'));
+      if (failed.isEmpty) {
+        debugPrint('[~] 1.2 PASS : all config fields applied: $results');
+      } else {
+        debugPrint(
+          '[REGRESSION] 1.2 FAIL : fields not applied by native initialize():\n'
+          '${failed.map((e) => '  ${e.key}: ${e.value}').join('\n')}\n'
+          'all results: $results',
+        );
+      }
+    } catch (e) {
+      debugPrint('[REGRESSION] 1.2 FAIL : threw: $e');
     }
   }
 
