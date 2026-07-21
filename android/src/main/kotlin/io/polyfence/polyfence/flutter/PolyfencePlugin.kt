@@ -55,6 +55,17 @@ class PolyfencePlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
         private var performanceSink: EventChannel.EventSink? = null
         private var methodChannelRef: MethodChannel? = null
 
+        // Every Flutter EventChannel.EventSink and MethodChannel.Result
+        // method is @UiThread and throws IllegalStateException when
+        // called off the platform-message thread. Neither the
+        // PolyfenceCoreDelegate contract nor the
+        // PolyfenceErrorManager.initialize callback contract pins the
+        // caller's thread — core is free to invoke either from a
+        // background thread, and does so in practice for anything
+        // reached from an off-main dispatch inside the engine. Route
+        // every sink and Result delivery through this shared handler.
+        private val mainHandler = Handler(Looper.getMainLooper())
+
         fun getMethodChannel(): MethodChannel? = methodChannelRef
         
         // Tracking state management
@@ -94,7 +105,7 @@ class PolyfencePlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
         /** Send status to performance channel */
         fun sendStatus(context: Context) {
             val payload = buildStatusPayload(context)
-            performanceSink?.success(payload)
+            mainHandler.post { performanceSink?.success(payload) }
         }
 
     }
@@ -116,7 +127,12 @@ class PolyfencePlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
             override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
                 errorSink = events
                 PolyfenceErrorManager.initialize { errorMap ->
-                    events?.success(errorMap)
+                    // Go through the errorSink companion (which onCancel
+                    // nulls) rather than the captured `events` reference
+                    // — a runnable already queued on mainHandler when
+                    // onCancel fires must drop, not deliver to a stream
+                    // Flutter has already released.
+                    mainHandler.post { errorSink?.success(errorMap) }
                 }
                 Log.d("PolyfencePlugin", "Error stream listener connected")
             }
@@ -315,10 +331,9 @@ class PolyfencePlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
                 // DEBUG_INFO_FAILED platform error.
                 //
                 // Dispatch the whole collectDebugInfo call to a background
-                // thread, marshal the result back to main via the main-Looper
-                // Handler — Flutter's MethodChannel.Result requires the
+                // thread, marshal the result back to main via the shared
+                // mainHandler — Flutter's MethodChannel.Result requires the
                 // callback on the platform-message thread it was invoked on.
-                val mainHandler = Handler(Looper.getMainLooper())
                 Thread {
                     try {
                         val debugInfo = PolyfenceDebugCollector.collectDebugInfo(context)
@@ -652,21 +667,27 @@ class PolyfencePlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     }
     
     // PolyfenceCoreDelegate — bridges core events to Flutter EventChannel sinks
+    // Every delegate callback marshals to the platform-message
+    // (main) thread before touching an EventChannel.EventSink — those
+    // methods are @UiThread and throw IllegalStateException when
+    // called from any other thread. Core does not contract a
+    // callback thread and reaches these paths from background
+    // dispatches in practice.
     private val coreDelegate = object : PolyfenceCoreDelegate {
         override fun onLocationUpdate(locationData: Map<String, Any>) {
-            locationSink?.success(locationData)
+            mainHandler.post { locationSink?.success(locationData) }
         }
 
         override fun onGeofenceEvent(eventData: Map<String, Any>) {
-            geofenceSink?.success(eventData)
+            mainHandler.post { geofenceSink?.success(eventData) }
         }
 
         override fun onPerformanceEvent(performanceData: Map<String, Any>) {
-            performanceSink?.success(performanceData)
+            mainHandler.post { performanceSink?.success(performanceData) }
         }
 
         override fun onError(errorData: Map<String, Any>) {
-            errorSink?.success(errorData)
+            mainHandler.post { errorSink?.success(errorData) }
         }
 
         override fun isTrackingEnabled(): Boolean {
